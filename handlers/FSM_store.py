@@ -6,7 +6,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from handlers.buttons import sizes
 
 
-class FSM_store(StatesGroup):
+class fsm_store(StatesGroup):
     product_name = State()
     size = State()
     category = State()
@@ -15,7 +15,7 @@ class FSM_store(StatesGroup):
 
 async def start_fsm_store(message: types.Message):
     await message.answer('введите название товара:')
-    await FSM_store.product_name.set()
+    await fsm_store.product_name.set()
 
 
 async def load_product_name(message: types.Message, state: FSMContext):
@@ -23,7 +23,7 @@ async def load_product_name(message: types.Message, state: FSMContext):
         data['product_name'] = message.text
 
         await message.answer('выберите размер:', reply_markup=sizes)
-        await FSM_store.next()
+        await fsm_store.next()
 
 
 async def load_size(message: types.Message, state: FSMContext):
@@ -31,14 +31,14 @@ async def load_size(message: types.Message, state: FSMContext):
         data['size'] = message.text
 
         await message.answer('укажите категорию')
-        await FSM_store.next()
+        await fsm_store.next()
 
 async def load_category(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['category'] = message.text
 
         await message.answer('укажите желаемую цену:')
-        await FSM_store.next()
+        await fsm_store.next()
 
 
 async def load_price(message: types.Message, state: FSMContext):
@@ -46,7 +46,7 @@ async def load_price(message: types.Message, state: FSMContext):
         data['price'] = message.text
 
         await message.answer('отправьте фотографию товара')
-        await FSM_store.next()
+        await fsm_store.next()
 
 
 async def load_product_photo(message: types.Message, state: FSMContext):
@@ -62,11 +62,11 @@ async def load_product_photo(message: types.Message, state: FSMContext):
 
 def register_FSM_store(dp: Dispatcher):
     dp.register_message_handler(start_fsm_store, commands=['store'])
-    dp.register_message_handler(load_product_name, state=FSM_store.product_name)
-    dp.register_message_handler(load_size, state=FSM_store.size)
-    dp.register_message_handler(load_category, state=FSM_store.category)
-    dp.register_message_handler(load_price, state=FSM_store.price)
-    dp.register_message_handler(load_product_photo, state=FSM_store.product_photo,
+    dp.register_message_handler(load_product_name, state=fsm_store.product_name)
+    dp.register_message_handler(load_size, state=fsm_store.size)
+    dp.register_message_handler(load_category, state=fsm_store.category)
+    dp.register_message_handler(load_price, state=fsm_store.price)
+    dp.register_message_handler(load_product_photo, state=fsm_store.product_photo,
                                 content_types=['photo'])
 
 
